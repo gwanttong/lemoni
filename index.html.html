@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>르모니 — 내 패턴을 찾는 호르몬 관리 템플릿</title>
+<meta name="description" content="앱은 날짜를 예측합니다. 르모니는 오늘 뭘 할지 알려줍니다. 여동생 다섯 둔 장남이 만든 노션 템플릿.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css">
+<style>
+:root{
+  --bg:#F7F6F4; --card:#FFFFFF; --ink:#18181B; --muted:#6F6E6A;
+  --line:#E4E3DE; --line-soft:#EFEEEA;
+  --accent:#7A4E63; --accent-bg:#F3EDF0; --accent-ink:#5E3A4B;
+  --p1:#C4667F; --p2:#5F9350; --p3:#4C86BD; --p4:#C79242; --p5:#A9662B;
+}
+:root[data-theme="dark"], :root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+    --bg:#1A1A1C; --card:#232326; --ink:#ECECEE; --muted:#9C9B97;
+    --line:#333336; --line-soft:#2B2B2E;
+    --accent:#C99BB0; --accent-bg:#2E2329; --accent-ink:#E2BECE;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1A1A1C; --card:#232326; --ink:#ECECEE; --muted:#9C9B97;
+  --line:#333336; --line-soft:#2B2B2E;
+  --accent:#C99BB0; --accent-bg:#2E2329; --accent-ink:#E2BECE;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:16px; line-height:1.75; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px; margin:0 auto; padding:0 24px}
+a{color:inherit}
+
+/* 다섯 구간 색 띠 — 제품에서 그대로 가져온 시각 장치 */
+.spine{display:flex; height:3px; width:100%}
+.spine i{flex:1}
+.spine i:nth-child(1){background:var(--p1)}
+.spine i:nth-child(2){background:var(--p2)}
+.spine i:nth-child(3){background:var(--p3)}
+.spine i:nth-child(4){background:var(--p4)}
+.spine i:nth-child(5){background:var(--p5)}
+
+header{padding:20px 0 0}
+.brand{font-size:17px; font-weight:700; letter-spacing:-.01em}
+
+.hero{padding:76px 0 64px}
+.hero h1{
+  font-size:clamp(30px, 6vw, 46px); line-height:1.25; font-weight:700;
+  margin:0 0 22px; letter-spacing:-.025em;
+}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .lede{font-size:18px; line-height:1.8; color:var(--muted); margin:0 0 14px; max-width:31em}
+.sig{font-size:15px; color:var(--muted); margin:0 0 34px}
+.cta{display:flex; flex-wrap:wrap; gap:10px}
+.btn{
+  display:inline-block; text-decoration:none; border-radius:10px;
+  padding:13px 24px; font-size:16px; font-weight:500; transition:opacity .15s;
+}
+.btn:hover{opacity:.82}
+.btn-main{background:var(--accent); color:#fff}
+.btn-sub{background:var(--card); border:1px solid var(--line)}
+
+section{padding:56px 0; border-top:1px solid var(--line-soft)}
+h2{font-size:26px; font-weight:700; margin:0 0 10px; letter-spacing:-.02em; line-height:1.35}
+.sub{font-size:16px; color:var(--muted); margin:0 0 28px; max-width:33em}
+p{margin:0 0 16px; max-width:34em}
+
+.vs{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
+.vs > div{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px}
+.vs .who{font-size:13px; color:var(--muted); margin:0 0 8px}
+.vs .what{font-size:17px; font-weight:600; margin:0 0 10px; line-height:1.5}
+.vs .detail{font-size:14.5px; color:var(--muted); margin:0; line-height:1.75}
+.vs .mine{border-color:var(--accent); border-width:1.5px}
+.vs .mine .who{color:var(--accent)}
+
+.feat{display:grid; gap:2px; background:var(--line-soft); border-radius:14px; overflow:hidden; border:1px solid var(--line)}
+.feat > div{background:var(--card); padding:20px 22px}
+.feat h3{font-size:16.5px; font-weight:600; margin:0 0 5px}
+.feat p{font-size:14.5px; color:var(--muted); margin:0; line-height:1.75; max-width:none}
+
+.try{background:var(--accent-bg); border-radius:16px; padding:34px 26px; text-align:center}
+.try h2{color:var(--accent-ink); margin-bottom:8px}
+.try p{color:var(--accent-ink); opacity:.85; margin:0 auto 22px; max-width:26em; font-size:15.5px}
+
+.courses{display:grid; gap:10px}
+.course{
+  display:flex; align-items:center; gap:16px; background:var(--card);
+  border:1px solid var(--line); border-radius:12px; padding:16px 20px;
+  text-decoration:none; transition:border-color .15s;
+}
+.course:hover{border-color:var(--accent)}
+.course .n{
+  flex-shrink:0; width:28px; height:28px; border-radius:50%;
+  background:var(--accent-bg); color:var(--accent-ink);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:600;
+}
+.course .t{flex:1; font-size:16px; font-weight:500}
+.course .len{font-size:13px; color:var(--muted)}
+
+.buy{background:var(--card); border:1.5px solid var(--accent); border-radius:16px; padding:32px 26px}
+.buy h2{margin-bottom:6px}
+.buy .price{font-size:32px; font-weight:700; margin:16px 0 4px; letter-spacing:-.02em}
+.buy .note{font-size:14px; color:var(--muted); margin:0 0 24px}
+.buy ul{margin:0 0 26px; padding-left:18px; font-size:15.5px}
+.buy li{margin-bottom:7px}
+
+.safe{font-size:14px; color:var(--muted); line-height:1.85; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px}
+.safe p{margin:0 0 6px; max-width:none}
+.safe p:last-child{margin:0}
+
+footer{padding:40px 0 60px; font-size:14px; color:var(--muted); border-top:1px solid var(--line-soft)}
+footer p{margin:0 0 6px}
+</style>
+</head>
+<body>
+
+<div class="spine"><i></i><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <header><span class="brand">르모니</span></header>
+
+  <div class="hero">
+    <h1>앱은 날짜를 예측합니다.<br>르모니는 <em>오늘 뭘 할지</em> 알려줍니다.</h1>
+    <p class="lede">수면, 식단, 활동, 감정을 기록해서 내 패턴을 찾습니다. 그리고 지금 힘들 때, 10초 안에 할 수 있는 행동 하나를 건넵니다.</p>
+    <p class="sig">여동생 다섯을 둔 장남이 만들었습니다.</p>
+    <div class="cta">
+      <a class="btn btn-main" href="deck.html">10초 행동 덱 써보기 · 무료</a>
+      <a class="btn btn-sub" href="#buy">템플릿 보기</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section>
+  <h2>왜 또 하나의 기록 도구인가</h2>
+  <p class="sub">이미 앱으로 기록하고 계실 겁니다. 르모니가 맡는 자리는 다릅니다.</p>
+  <div class="vs">
+    <div>
+      <p class="who">주기 앱</p>
+      <p class="what">언제 시작할지 알려줍니다</p>
+      <p class="detail">날짜를 예측하고 증상을 남깁니다. 자동이고, 정확하고, 대부분 무료입니다. 이건 그대로 쓰세요.</p>
+    </div>
+    <div class="mine">
+      <p class="who">르모니</p>
+      <p class="what">뭘 바꿔야 할지 알려줍니다</p>
+      <p class="detail">잠이 짧았던 날과 힘들었던 날이 겹치는지 봅니다. 주기가 끝날 때마다 한 가지를 정해서 다음 주기에 바꿔봅니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>안에 들어 있는 것</h2>
+  <p class="sub">노션 템플릿 한 벌. 복제하면 바로 내 것이 됩니다.</p>
+  <div class="feat">
+    <div>
+      <h3>오늘 카드</h3>
+      <p>열면 바로 보입니다. 오늘이 몇 일차인지, 어느 구간인지, 다음 생리까지 며칠인지. 생리 시작일만 넣으면 나머지는 자동입니다.</p>
+    </div>
+    <div>
+      <h3>하루 기록 · 30초</h3>
+      <p>수면, 에너지, 기분, 스트레스, 활동, 식사, 피부, 증상. 고르기만 하면 됩니다. 매일 다 채우지 않아도 패턴은 나옵니다.</p>
+    </div>
+    <div>
+      <h3>10초 행동 덱</h3>
+      <p>사흘이면 무시하게 될 체크리스트 대신, 힘들 때 한 장씩 뽑습니다. 감정인지 증상인지만 고르면 됩니다. 왜 그렇게 하는지도 같이 나옵니다.</p>
+    </div>
+    <div>
+      <h3>증상 나침반</h3>
+      <p>구간마다 흔한 모습과 그 반대 모습을 나란히 둡니다. 남들과 다르다고 느낄 때, 그것도 흔한 경우라는 걸 확인하는 곳입니다.</p>
+    </div>
+    <div>
+      <h3>주기 리뷰</h3>
+      <p>주기가 끝나면 10분. 이번에 알아낸 것 하나, 다음에 바꿀 것 하나. 이게 쌓이면 앱이 줄 수 없는 내 사용설명서가 됩니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="try">
+    <h2>덱은 그냥 써보세요</h2>
+    <p>사지 않아도 됩니다. 지금 힘들면 지금 열어서 한 장 뽑으면 됩니다.</p>
+    <a class="btn btn-main" href="deck.html">10초 행동 덱 열기</a>
+  </div>
+</section>
+
+<section>
+  <h2>노션이 처음이어도 됩니다</h2>
+  <p class="sub">막히는 지점은 네 군데뿐입니다. 전부 무료로 공개합니다.</p>
+  <div class="courses">
+    <a class="course" href="#"><span class="n">1</span><span class="t">템플릿 내 노션으로 가져오기</span><span class="len">2분</span></a>
+    <a class="course" href="#"><span class="n">2</span><span class="t">생리 시작일 넣고 주기 설정하기</span><span class="len">3분</span></a>
+    <a class="course" href="#"><span class="n">3</span><span class="t">하루 기록 30초에 끝내기</span><span class="len">2분</span></a>
+    <a class="course" href="#"><span class="n">4</span><span class="t">덱 열고 쓰는 법</span><span class="len">2분</span></a>
+  </div>
+</section>
+
+<section id="buy">
+  <div class="buy">
+    <h2>르모니 템플릿</h2>
+    <p class="sub" style="margin-bottom:0">노션 템플릿 + 전자책 PDF</p>
+    <p class="price">00,000원</p>
+    <p class="note">한 번 결제하면 계속 쓰실 수 있습니다.</p>
+    <ul>
+      <li>노션 템플릿 전체 (오늘 카드, 하루 기록, 덱, 나침반, 주기 리뷰)</li>
+      <li>전자책 PDF — 구간별로 몸에서 일어나는 일, 수면·식단·활동 정리</li>
+      <li>노션 사용 강좌 4편</li>
+      <li>업데이트되면 다시 받으실 수 있습니다</li>
+    </ul>
+    <a class="btn btn-main" href="#">구매하기</a>
+  </div>
+</section>
+
+<section>
+  <div class="safe">
+    <p>르모니는 진단하거나 치료하지 않습니다. 내 상태를 기록하고 패턴을 보는 도구입니다.</p>
+    <p>증상이 심하거나 평소와 다르면 병원에서 확인해 보세요.</p>
+    <p>가라앉은 기분이 2주 넘게 이어지거나 일상이 힘들 정도면 전문가와 상담해 보세요.</p>
+  </div>
+</section>
+
+<footer>
+  <p><strong>르모니</strong></p>
+  <p>여성 자기계발 · 심리 · 호르몬 관리</p>
+</footer>
+
+</div>
+</body>
+</html>
