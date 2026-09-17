@@ -10,153 +10,176 @@
   --bg:#F7F6F4; --card:#FFFFFF; --ink:#18181B; --muted:#6F6E6A;
   --line:#E4E3DE; --line-soft:#EFEEEA;
   --accent:#7A4E63; --accent-bg:#F3EDF0; --accent-ink:#5E3A4B;
+  --back1:#8E6479; --back2:#6E4A5C;
 }
-:root:not([data-theme="light"]){
-  @media (prefers-color-scheme: dark){
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
     --bg:#1A1A1C; --card:#232326; --ink:#ECECEE; --muted:#9C9B97;
     --line:#333336; --line-soft:#2B2B2E;
     --accent:#C99BB0; --accent-bg:#2E2329; --accent-ink:#E2BECE;
+    --back1:#6B4557; --back2:#4E3140;
   }
-}
-:root[data-theme="dark"]{
-  --bg:#1A1A1C; --card:#232326; --ink:#ECECEE; --muted:#9C9B97;
-  --line:#333336; --line-soft:#2B2B2E;
-  --accent:#C99BB0; --accent-bg:#2E2329; --accent-ink:#E2BECE;
 }
 *{box-sizing:border-box}
 body{
   margin:0; background:var(--bg); color:var(--ink);
   font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;
-  display:flex; justify-content:center; padding:20px 16px 28px;
+  display:flex; justify-content:center; padding:22px 16px 28px;
 }
-.wrap{width:100%; max-width:520px}
+.wrap{width:100%; max-width:560px}
+button{font:inherit; color:inherit; cursor:pointer; font-family:inherit; border:none; background:none}
 
-.step{margin-bottom:22px}
-.step.hidden{display:none}
-.q{font-size:14px; color:var(--muted); margin:0 0 10px}
+.step{display:none}
+.step.on{display:block}
+.q{font-size:14.5px; color:var(--muted); margin:0 0 16px; text-align:center}
 
-.chips{display:flex; flex-wrap:wrap; gap:8px}
-button{font:inherit; color:inherit; cursor:pointer}
-.chip{
-  background:var(--card); border:1px solid var(--line); border-radius:9px;
-  padding:9px 16px; font-size:15px; transition:border-color .15s, color .15s;
+.pick{
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:16px 12px; transition:transform .18s, border-color .18s, box-shadow .18s;
 }
-.chip:hover{border-color:var(--accent); color:var(--accent)}
-.chip.on{border-color:var(--accent); border-width:1.5px; color:var(--accent); font-weight:500}
-.chip:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.pick:hover{transform:translateY(-4px); border-color:var(--accent); box-shadow:0 8px 20px rgba(0,0,0,.09)}
+.pick:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+.pick .em{font-size:26px; margin-bottom:10px; line-height:1}
+.pick .t{font-size:16px; font-weight:600; letter-spacing:-.01em}
+.pick .s{font-size:12.5px; color:var(--muted); margin-top:5px; line-height:1.5}
 
-.big{padding:16px 18px; text-align:left; flex:1 1 150px}
-.big .t{font-size:17px; font-weight:600; display:block; margin-bottom:3px}
-.big .s{font-size:13px; color:var(--muted); display:block; font-weight:400}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:400px; margin:0 auto}
+.two .pick{aspect-ratio:3/4}
+.many{display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); gap:10px}
+.many .pick{aspect-ratio:3/4; padding:10px 6px}
+.many .pick .t{font-size:14px}
+.many .pick .em{font-size:21px; margin-bottom:7px}
 
-.card{
-  background:var(--card); border-radius:16px; padding:30px 24px;
-  text-align:center; border:1px solid var(--line);
+.stage{
+  position:relative; min-height:430px; display:flex; align-items:center;
+  justify-content:center; perspective:1400px; margin-bottom:6px;
 }
-.card .cond{font-size:12px; color:var(--muted); margin:0 0 14px; letter-spacing:.01em}
-.card .act{font-size:21px; font-weight:600; line-height:1.5; margin:0 0 16px; letter-spacing:-.01em}
-.card .why{
-  font-size:14px; color:var(--muted); line-height:1.8; margin:0;
-  border-top:1px solid var(--line-soft); padding-top:15px; text-align:left;
+.cf{
+  position:absolute; width:120px; height:172px; border-radius:13px;
+  transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.86,.3,1), width .55s cubic-bezier(.2,.86,.3,1),
+             height .55s cubic-bezier(.2,.86,.3,1), opacity .4s;
+  will-change:transform,width,height;
 }
-.card.flip{animation:flip .35s ease-out}
-@keyframes flip{
-  from{opacity:0; transform:translateY(6px) scale(.985)}
-  to{opacity:1; transform:none}
+.cf .side{
+  position:absolute; inset:0; border-radius:13px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden;
 }
-@media (prefers-reduced-motion: reduce){ .card.flip{animation:none} }
+.cf .back{
+  background:linear-gradient(150deg, var(--back1), var(--back2));
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 2px 12px rgba(0,0,0,.15);
+  display:flex; align-items:center; justify-content:center;
+}
+.cf .back span{font-size:26px; opacity:.5}
+.cf .front{
+  background:var(--card); border:1px solid var(--line);
+  transform:rotateY(180deg); box-shadow:0 10px 30px rgba(0,0,0,.14);
+  display:flex; flex-direction:column; padding:24px 20px; text-align:left;
+}
+.cf .front .cond{font-size:11.5px; color:var(--muted); margin:0 0 12px; letter-spacing:.02em}
+.cf .front .act{font-size:19px; font-weight:600; line-height:1.45; margin:0 0 auto; letter-spacing:-.015em}
+.cf .front .why{
+  font-size:13px; color:var(--muted); line-height:1.75; margin:14px 0 0;
+  border-top:1px solid var(--line-soft); padding-top:12px;
+}
 
-.acts{display:flex; gap:8px; margin-top:12px}
+@keyframes sh{
+  0%{transform:translate(var(--x),var(--y)) rotate(var(--r))}
+  22%{transform:translate(calc(var(--x) - 30px), calc(var(--y) - 16px)) rotate(calc(var(--r) - 13deg))}
+  52%{transform:translate(calc(var(--x) + 26px), calc(var(--y) + 10px)) rotate(calc(var(--r) + 15deg))}
+  78%{transform:translate(calc(var(--x) - 10px), var(--y)) rotate(calc(var(--r) - 5deg))}
+  100%{transform:translate(var(--x),var(--y)) rotate(var(--r))}
+}
+.cf.shuffling{animation:sh .55s ease-in-out}
+.cf.out{opacity:0}
+.cf.drawn{
+  width:min(300px, 78vw); height:min(420px, 108vw);
+  transform:translate(0,0) rotate(0deg) rotateY(180deg) !important;
+  z-index:60;
+}
+@media (prefers-reduced-motion: reduce){
+  .cf{transition:none} .cf.shuffling{animation:none}
+}
+
+.mainbtn{
+  display:block; width:100%; background:var(--accent); color:#fff;
+  border-radius:11px; padding:15px; font-size:16.5px; font-weight:600;
+}
+.mainbtn:hover{opacity:.9}
+.acts{display:flex; gap:8px}
 .acts button{
   flex:1; background:var(--card); border:1px solid var(--line);
-  border-radius:9px; padding:12px; font-size:15px;
+  border-radius:11px; padding:14px; font-size:15.5px;
 }
 .acts button:hover{border-color:var(--accent); color:var(--accent)}
-.acts .primary{background:var(--accent-bg); border-color:var(--accent-bg); color:var(--accent-ink); font-weight:500}
+.acts .primary{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+.acts .primary:hover{opacity:.9; color:#fff}
+.hidden{display:none !important}
 
-.done{
-  background:var(--accent-bg); color:var(--accent-ink); border-radius:16px;
-  padding:34px 24px; text-align:center;
-}
-.done p{margin:0 0 6px; font-size:19px; font-weight:600}
+.done{background:var(--accent-bg); color:var(--accent-ink); border-radius:16px; padding:36px 24px; text-align:center}
+.done p{margin:0 0 6px; font-size:20px; font-weight:600}
 .done span{font-size:14px; opacity:.85}
 
-.back{
-  background:none; border:none; padding:10px 0 0; font-size:14px; color:var(--muted);
-}
-.back:hover{color:var(--accent)}
+.backlink{padding:14px 0 0; font-size:14px; color:var(--muted); display:block; margin:0 auto}
+.backlink:hover{color:var(--accent)}
 
-
-.upsell{
-  margin-top:22px; background:var(--accent-bg); border-radius:14px;
-  padding:22px 20px; text-align:center;
-}
-.upsell p{margin:0 0 4px; font-size:15.5px; font-weight:600; color:var(--accent-ink)}
-.upsell span{font-size:13.5px; color:var(--accent-ink); opacity:.85; display:block; margin-bottom:14px}
-.upsell a{
-  display:inline-block; text-decoration:none; background:var(--accent); color:#fff;
-  border-radius:9px; padding:11px 22px; font-size:15px; font-weight:500;
-}
-.upsell a:hover{opacity:.85}
-
-footer{
-  margin-top:26px; padding-top:16px; border-top:1px solid var(--line-soft);
-  font-size:12.5px; color:var(--muted); line-height:1.8;
-}
+footer{margin-top:26px; padding-top:16px; border-top:1px solid var(--line-soft); font-size:12.5px; color:var(--muted); line-height:1.8; text-align:center}
 footer p{margin:0 0 4px}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="step" id="s1">
+  <section class="step on" id="s1">
     <p class="q">지금 뭐 때문에 힘들어요?</p>
-    <div class="chips">
-      <button class="chip big" data-branch="감정"><span class="t">감정 때문에</span><span class="s">예민함, 불안, 가라앉음</span></button>
-      <button class="chip big" data-branch="증상"><span class="t">증상 때문에</span><span class="s">통증, 두통, 붓기, 피로</span></button>
+    <div class="two">
+      <button class="pick" data-branch="감정">
+        <span class="em">💭</span><span class="t">감정</span>
+        <span class="s">예민함 · 불안<br>가라앉음</span>
+      </button>
+      <button class="pick" data-branch="증상">
+        <span class="em">🫧</span><span class="t">증상</span>
+        <span class="s">통증 · 두통<br>붓기 · 피로</span>
+      </button>
     </div>
-  </div>
+  </section>
 
-  <div class="step hidden" id="s2">
+  <section class="step" id="s2">
     <p class="q" id="q2">어떤 쪽인가요?</p>
-    <div class="chips" id="items"></div>
-    <button class="back" id="back1">← 처음으로</button>
-  </div>
+    <div class="many" id="items"></div>
+    <button class="backlink" id="back1">← 처음으로</button>
+  </section>
 
-  <div class="step hidden" id="s3">
-    <div class="card" id="card">
-      <p class="cond" id="cond"></p>
-      <p class="act" id="act"></p>
-      <p class="why" id="why"></p>
-    </div>
-    <div class="acts">
-      <button id="redraw">다시 뽑기</button>
+  <section class="step" id="s3">
+    <div class="stage" id="stage"></div>
+    <button class="mainbtn" id="draw">섞고 뽑기</button>
+    <div class="acts hidden" id="acts">
+      <button id="again">다시 뽑기</button>
       <button id="did" class="primary">했어요</button>
     </div>
-    <button class="back" id="back2">← 처음으로</button>
-  </div>
+    <button class="backlink" id="back2">← 처음으로</button>
+  </section>
 
-  <div class="step hidden" id="s4">
-    <div class="done">
-      <p>하나 했어요</p>
-      <span>그거면 오늘은 충분해요</span>
-    </div>
-    <button class="back" id="back3">← 처음으로</button>
-  </div>
+  <section class="step" id="s4">
+    <div class="done"><p>하나 했어요</p><span>그거면 오늘은 충분해요</span></div>
+    <button class="backlink" id="back3">← 처음으로</button>
+  </section>
 
 
-  <div class="upsell">
-    <p>카드가 반복되나요?</p>
-    <span>여기는 항목마다 2장씩 있는 맛보기예요. 전체 덱은 4장씩, 그리고 계속 늘어납니다.</span>
-    <a href="index.html#buy">르모니 템플릿 보기</a>
+  <div style="margin-top:22px; background:var(--accent-bg); border-radius:14px; padding:20px; text-align:center;">
+    <p style="margin:0 0 4px; font-size:15.5px; font-weight:600; color:var(--accent-ink)">카드가 반복되나요?</p>
+    <span style="font-size:13.5px; color:var(--accent-ink); opacity:.85; display:block; margin-bottom:14px;">여기는 항목마다 2장씩 있는 맛보기예요. 전체 덱은 4장씩, 그리고 계속 늘어납니다.</span>
+    <a href="index.html#buy" style="display:inline-block; text-decoration:none; background:var(--accent); color:#fff; border-radius:9px; padding:11px 22px; font-size:15px; font-weight:500;">르모니 템플릿 보기</a>
   </div>
 
   <footer>
     <p>증상이 심하거나 평소와 다르면 병원에서 확인해 보세요.</p>
     <p>가라앉은 기분이 2주 넘게 이어지거나 일상이 힘들 정도면 전문가와 상담해 보세요.</p>
   </footer>
-
 </div>
 
 <script>
@@ -276,49 +299,76 @@ const DECK = {
     ]
   }
 };
+const EMOJI = {
+  "긴장":"🪢","예민":"⚡","불안":"🌊","무기력":"🪨","우울":"🌧️",
+  "생리통":"🩹","허리·골반 통증":"🦴","두통":"💥","붓기":"💧","졸림·피로":"😮‍💨","속 불편함":"🍵"
+};
 
 const $ = id => document.getElementById(id);
-const steps = ["s1","s2","s3","s4"];
-let branch = null, item = null;
+const STEPS = ["s1","s2","s3","s4"];
+let branch = null, item = null, busy = false;
+const show = id => STEPS.forEach(s => $(s).classList.toggle("on", s === id));
 
-function show(id){
-  steps.forEach(s => $(s).classList.toggle("hidden", s !== id));
+const rkey = (b,i) => "lemoni:recent:"+b+":"+i;
+function getRecent(b,i){
+  try{ const r = localStorage.getItem(rkey(b,i)); return r ? JSON.parse(r) : []; }catch(e){ return []; }
+}
+function pushRecent(b,i,idx){
+  try{ const l = getRecent(b,i); l.push(idx); while(l.length>2) l.shift();
+       localStorage.setItem(rkey(b,i), JSON.stringify(l)); }catch(e){}
+}
+function pick(){
+  const cards = DECK[branch][item];
+  const recent = getRecent(branch,item);
+  let pool = cards.map((_,i)=>i).filter(i=>!recent.includes(i));
+  if(!pool.length) pool = cards.map((_,i)=>i);
+  const idx = pool[Math.floor(Math.random()*pool.length)];
+  pushRecent(branch,item,idx);
+  return cards[idx];
 }
 
-function recentKey(b, i){ return "lemoni:recent:" + b + ":" + i; }
-
-function getRecent(b, i){
-  try {
-    const raw = localStorage.getItem(recentKey(b, i));
-    return raw ? JSON.parse(raw) : [];
-  } catch (e) { return []; }
-}
-
-function pushRecent(b, i, idx){
-  try {
-    const list = getRecent(b, i);
-    list.push(idx);
-    while (list.length > 2) list.shift();
-    localStorage.setItem(recentKey(b, i), JSON.stringify(list));
-  } catch (e) { /* 저장이 막혀 있어도 뽑기는 그대로 돌아갑니다 */ }
+const FAN = 5;
+function buildFan(){
+  const stage = $("stage");
+  stage.innerHTML = "";
+  const mid = (FAN-1)/2;
+  for(let k=0;k<FAN;k++){
+    const off = k - mid;
+    const x = off*40, y = Math.abs(off)*9, r = off*15;
+    const el = document.createElement("div");
+    el.className = "cf";
+    el.style.setProperty("--x", x+"px");
+    el.style.setProperty("--y", y+"px");
+    el.style.setProperty("--r", r+"deg");
+    el.style.transform = "translate("+x+"px,"+y+"px) rotate("+r+"deg)";
+    el.style.zIndex = String(10 - Math.abs(off));
+    el.innerHTML =
+      '<div class="side back"><span>🌙</span></div>' +
+      '<div class="side front"><p class="cond"></p><p class="act"></p><p class="why"></p></div>';
+    stage.appendChild(el);
+  }
 }
 
 function draw(){
-  const cards = DECK[branch][item];
-  const recent = getRecent(branch, item);
-  let pool = cards.map((_, i) => i).filter(i => !recent.includes(i));
-  if (pool.length === 0) pool = cards.map((_, i) => i);
-  const idx = pool[Math.floor(Math.random() * pool.length)];
-  pushRecent(branch, item, idx);
+  if(busy) return;
+  busy = true;
+  $("acts").classList.add("hidden");
+  $("draw").classList.add("hidden");
 
-  $("cond").textContent = branch + " · " + item + " · " + cards.length + "장 중 1장";
-  $("act").textContent = cards[idx][0];
-  $("why").textContent = cards[idx][1];
+  const cards = [...$("stage").children];
+  cards.forEach(c => { c.classList.remove("drawn","out"); c.classList.add("shuffling"); });
 
-  const c = $("card");
-  c.classList.remove("flip");
-  void c.offsetWidth;
-  c.classList.add("flip");
+  setTimeout(() => {
+    cards.forEach(c => c.classList.remove("shuffling"));
+    const chosen = cards[Math.floor(Math.random()*cards.length)];
+    const data = pick();
+    chosen.querySelector(".cond").textContent = branch + " · " + item;
+    chosen.querySelector(".act").textContent = data[0];
+    chosen.querySelector(".why").textContent = data[1];
+    cards.forEach(c => { if(c !== chosen) c.classList.add("out"); });
+    chosen.classList.add("drawn");
+    setTimeout(() => { $("acts").classList.remove("hidden"); busy = false; }, 560);
+  }, 560);
 }
 
 function renderItems(){
@@ -326,12 +376,13 @@ function renderItems(){
   box.innerHTML = "";
   Object.keys(DECK[branch]).forEach(name => {
     const b = document.createElement("button");
-    b.className = "chip";
-    b.textContent = name;
+    b.className = "pick";
+    b.innerHTML = '<span class="em">'+(EMOJI[name]||"🌙")+'</span><span class="t">'+name+'</span>';
     b.addEventListener("click", () => {
       item = name;
-      [...box.children].forEach(el => el.classList.toggle("on", el === b));
-      draw();
+      buildFan();
+      $("acts").classList.add("hidden");
+      $("draw").classList.remove("hidden");
       show("s3");
     });
     box.appendChild(b);
@@ -346,12 +397,12 @@ document.querySelectorAll("[data-branch]").forEach(btn => {
     show("s2");
   });
 });
-
-$("redraw").addEventListener("click", draw);
+$("draw").addEventListener("click", draw);
+$("again").addEventListener("click", draw);
 $("did").addEventListener("click", () => show("s4"));
-["back1","back2","back3"].forEach(id => {
-  $(id).addEventListener("click", () => { branch = null; item = null; show("s1"); });
-});
+["back1","back2","back3"].forEach(id =>
+  $(id).addEventListener("click", () => { branch=null; item=null; busy=false; show("s1"); })
+);
 </script>
 </body>
 </html>
